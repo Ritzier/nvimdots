@@ -1,37 +1,129 @@
 local M = {}
 
 function M.setup()
-    --vim.api.nvim_command("set foldmethod=expr")
-    --vim.api.nvim_command("set foldexpr=nvim_treesitter#foldexpr()")
+  require("nvim-treesitter.configs").setup {
+    -- One of "all", "maintained" (parsers with maintainers), or a list of languages
+    ensure_installed = "all",
 
-    require("nvim-treesitter.configs").setup {
-        ensure_installed = "all",
+    -- Install languages synchronously (only applied to `ensure_installed`)
+    sync_install = false,
 
-        sync_install = false,
+    highlight = {
+      -- `false` will disable the whole extension
+      enable = true,
+    },
 
-        highlight = {
-            enable = true,
+    rainbow = {
+      enable = true,
+      extended_mode = true,
+      max_file_lines = nil,
+    },
+
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "gnn",
+        node_incremental = "grn",
+        scope_incremental = "grc",
+        node_decremental = "grm",
+      },
+    },
+
+    indent = { enable = true, disable = { "python", "java" } },
+
+    -- vim-matchup
+    matchup = {
+      enable = true,
+    },
+
+    -- nvim-treesitter-textsubjects
+    textsubjects = {
+      enable = true,
+      prev_selection = ",", -- (Optional) keymap to select the previous selection
+      keymaps = {
+        ["."] = "textsubjects-smart",
+        [";"] = "textsubjects-container-outer",
+        ["i;"] = "textsubjects-container-inner",
+      },
+    },
+
+    -- nvim-treesitter-textobjects
+    textobjects = {
+      select = {
+        enable = true,
+
+        -- Automatically jump forward to textobj, similar to targets.vim
+        lookahead = true,
+
+        keymaps = {
+          -- You can use the capture groups defined in textobjects.scm
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["ac"] = "@class.outer",
+          ["ic"] = "@class.inner",
         },
+      },
 
-        rainbow = {
-            enable = true,
-            extended_mode = true,
-            max_file_lines = nil,
+      swap = {
+        enable = true,
+        swap_next = {
+          ["<leader>cx"] = "@parameter.inner",
         },
-
-        indent = {
-            enable = true,
+        swap_previous = {
+          ["<leader>cX"] = "@parameter.inner",
         },
-        context_commentstring = { enable = true, enable_autocmd = false },
-        matchup = { enable = true },
-    }
+      },
 
-    require("nvim-treesitter.install").prefer_git = true
+      move = {
+        enable = true,
+        set_jumps = true, -- whether to set jumps in the jumplist
+        goto_next_start = {
+          ["]m"] = "@function.outer",
+          ["]]"] = "@class.outer",
+        },
+        goto_next_end = {
+          ["]M"] = "@function.outer",
+          ["]["] = "@class.outer",
+        },
+        goto_previous_start = {
+          ["[m"] = "@function.outer",
+          ["[["] = "@class.outer",
+        },
+        goto_previous_end = {
+          ["[M"] = "@function.outer",
+          ["[]"] = "@class.outer",
+        },
+      },
 
-	local parsers = require("nvim-treesitter.parsers").get_parser_configs()
-	for _, p in pairs(parsers) do
-		p.install_info.url = p.install_info.url:gsub("https://github.com/", "git@github.com:")
-	end
+      -- lsp_interop = {
+      --   enable = true,
+      --   border = "none",
+      --   peek_definition_code = {
+      --     ["<leader>cf"] = "@function.outer",
+      --     ["<leader>cF"] = "@class.outer",
+      --   },
+      -- },
+    },
+
+    -- endwise
+    endwise = {
+      enable = true,
+    },
+
+    -- autotag
+    autotag = {
+      enable = true,
+    },
+
+    -- context_commentstring
+    context_commentstring = {
+      enable = true,
+      enable_autocmd = false,
+    },
+
+    -- indent
+    -- yati = { enable = true },
+  }
 end
 
 return M

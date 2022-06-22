@@ -1,7 +1,7 @@
 local M = {}
 
-function M.autotag()
-	require("nvim-ts-autotag").setup({
+function M.setup()
+    require("nvim-ts-autotag").setup({
 		filetypes = {
 			"html",
 			"xml",
